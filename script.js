@@ -1,18 +1,29 @@
 const gameboard = (() => {
-    let board = Array(9).fill(" ")
+    let board = Array(3).fill(Array(3).fill(""));
     
-    const setOwnerId = (index, owner) => {
-        board[index] = owner.getId();
-        let boardSection = document.querySelector(`[data-index="${index}"]`);
-        boardSection.style.color = owner.getColor();
-        boardSection.textContent = owner.getSymbol();
+    const setOwnerId = (posY, posX, owner) => {
+        board[posY][posX] = owner.getId();
+        let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
+        console.log(cell)
+        cell.style.color = owner.getColor();
+        cell.textContent = owner.getSymbol();
     }
 
-    const getOwnerId = (index) => {
-        return board[index]
+    const getOwnerId = (posY, posX) => {
+        return board[posY][posX]
     }
 
-    return {setOwnerId, getOwnerId}
+    const checkWin = (lastCell) => {
+        const firstY = lastCell.dataset.y;
+        const firstX = lastCell.dataset.x;
+        const firstNeighbours = findNeighbourgs(firstY, firstX);
+        const SecondNeighbours = []
+        firstNeighbours.forEach( (cellY, cellX) => {
+             secondNeighbours.push(...findNeighbourgs(cellY, cellX))
+            })
+    }
+
+    return {setOwnerId, getOwnerId, checkWin}
 })()
 
 const Player = (id, name, symbol, color) => {
@@ -44,24 +55,28 @@ const game = (() => {
 
     const getTurn = () => turn;
     const playRound = (event) => {
-        choice = event.target.dataset.index;
+        console.log(event)
+        cellY = event.target.dataset.y;
+        cellX = event.target.dataset.x;
         if (turn % 2 === 0) {
-            gameboard.setOwnerId(choice, player1);
+            gameboard.setOwnerId(cellY, cellX, player1);
         } else {
-            gameboard.setOwnerId(choice, player2);
+            gameboard.setOwnerId(cellY, cellX, player2);
         }
         turn += 1;
     }
 
-    const sections = document.querySelectorAll(".board-section");
-    sections.forEach((section) => {
+    const checkEndGame = () => {
+        
+    }
+
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
         addEventListener("click", playRound)
     })
-
     return {getTurn}
 })()
 
-// TestGround...
 
 
 
