@@ -158,4 +158,4 @@ const game = (() => {
 
 
     return {startGame, player1, player2}
-})()
+})().startGame()
