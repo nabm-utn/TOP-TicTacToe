@@ -5,10 +5,13 @@ const gameboard = (() => {
     
     const setOwnerId = (posY, posX, owner) => {
         if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
-            board[posY][posX] = owner.getId();
-            let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
-            cell.style.color = owner.getColor();
-            cell.textContent = owner.getSymbol();
+            if (board[posY][posX] === "") {
+                board[posY][posX] = owner.getId();
+                let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
+                cell.style.color = owner.getColor();
+                cell.textContent = owner.getSymbol();
+                return true;
+            } else {return false}
         }
     }
 
