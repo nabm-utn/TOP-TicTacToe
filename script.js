@@ -1,25 +1,12 @@
 const gameboard = (() => {
-    const buildBoard = (n) => {
-        let board = [];
-        for (let i = 0; i < n; i++) {
-            let row = [];
-            for (let j=0; j<n; j++) {row.push("")}
-            board.push(row);            
-        } return board;
-    }
-
-    // let board = [["", "", ""],
-    //              ["", "", ""],
-    //              ["", "", ""]];
-
-    let board = buildBoard(3);
+    let board = [["", "", ""],
+                 ["", "", ""],
+                 ["", "", ""]];
     
     const setOwnerId = (posY, posX, owner) => {
-        console.table(board);
         if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
             board[posY][posX] = owner.getId();
             let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
-            console.log(cell)
             cell.style.color = owner.getColor();
             cell.textContent = owner.getSymbol();
         }
@@ -35,12 +22,12 @@ const gameboard = (() => {
 
     const checkFullColumn = (y, x) => {
         const owner = getOwnerId(y, x);
-        return getOwnerId(0, x) === owner && getOwnerId(1, x) === owner && getOwnerId(2, x);
+        return getOwnerId(0, x) === owner && getOwnerId(1, x) === owner && getOwnerId(2, x) === owner;
     }
 
     const checkFullRow = (y, x) => {
         const owner = getOwnerId(y, x);
-        return getOwnerId(y, 0) === owner && getOwnerId(y, 1) === owner && getOwnerId(y, 2);
+        return getOwnerId(y, 0) === owner && getOwnerId(y, 1) === owner && getOwnerId(y, 2) === owner;
     }
 
     const checkFullDiags = (y, x) => {
@@ -53,7 +40,7 @@ const gameboard = (() => {
     }
 
     const checkWin = (lastY, lastX) => {
-        return checkFullColumn(lastY, lastX) || checkFullRow(lastY, lastX) || checkFullDiags(lastY, lastX);
+        return result = checkFullColumn(lastY, lastX) || checkFullRow(lastY, lastX) || checkFullDiags(lastY, lastX);
     }
 
     return {setOwnerId, getOwnerId, checkWin}
@@ -84,21 +71,22 @@ const game = (() => {
     const player2 = Player("p2", "player 2", "O", "#0f0");
 
     let turn = 0;
-    let gameFinished = false;
 
     const getTurn = () => turn;
+
+    const checkEndGame = (cellY, cellX) => gameboard.checkWin(cellY, cellX) || turn >= 9;
     const playRound = (event) => {
         cellY = event.target.dataset.y;
         cellX = event.target.dataset.x;
+        let validMove = false;
         if (turn % 2 === 0) {
-            gameboard.setOwnerId(cellY, cellX, player1);
+            validMove = gameboard.setOwnerId(cellY, cellX, player1);
         } else {
-            gameboard.setOwnerId(cellY, cellX, player2);
+            validMove = gameboard.setOwnerId(cellY, cellX, player2);
         }
-        turn += 1;
-        if (gameboard.checkWin(cellY, cellX)) {
+        if (validMove) {turn += 1;}
+        if (checkEndGame(cellY, cellX)) {
             console.log("We have a winner!!!");
-            gameFinished = true;
             endGame();}
     }
 
@@ -112,7 +100,7 @@ const game = (() => {
     cells.forEach((cell) => {
         addEventListener("click", playRound)
     })
-    return {getTurn}
+    return {getTurn, checkEndGame}
 })()
 
 
