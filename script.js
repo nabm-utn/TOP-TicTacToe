@@ -77,10 +77,20 @@ const game = (() => {
 
     const getTurn = () => turn;
 
-    const checkEndGame = (cellY, cellX) => gameboard.checkWin(cellY, cellX) || turn >= 9;
+    const checkEndGame = (cellY, cellX) => {
+        if (gameboard.checkWin(cellY, cellX)) {
+            return gameboard.getOwnerId(cellY, cellX)
+        } else  if (turn >= 9) {
+            return "tie"
+        } else {
+            return false
+        }
+    }
+
     const playRound = (event) => {
         cellY = event.target.dataset.y;
         cellX = event.target.dataset.x;
+        
         let validMove = false;
         if (turn % 2 === 0) {
             validMove = gameboard.setOwnerId(cellY, cellX, player1);
@@ -88,22 +98,33 @@ const game = (() => {
             validMove = gameboard.setOwnerId(cellY, cellX, player2);
         }
         if (validMove) {turn += 1;}
-        if (checkEndGame(cellY, cellX)) {
-            console.log("We have a winner!!!");
-            endGame();}
+        
+        let winner = checkEndGame(cellY, cellX);
+        if (winner) {
+            if (winner === "p1") {
+                console.log(player1.getScore());
+                player1.increaseScore();
+                console.log(player1.getScore());
+            } else if (winner === "p2") {
+                player2.increaseScore();
+            }
+            endGame();
+        }
     }
 
     const endGame = () => {
         cells.forEach((cell) => {
             removeEventListener("click", playRound);
         })
+        document.querySelector(".p1-score p").textContent = player1.getScore();
+        document.querySelector(".p2-score p").textContent = player2.getScore();
     }
 
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell) => {
         addEventListener("click", playRound)
     })
-    return {getTurn, checkEndGame}
+    return {getTurn, player1, player2}
 })()
 
 

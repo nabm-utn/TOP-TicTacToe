@@ -21,13 +21,24 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
 .scoreboard div {
-    padding: 20px 60px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 40px;
     font-size: 1.5em;
     color: rgb(158, 158, 158);
+}
+
+.scoreboard div p {
+    margin: 0 15px;
+    font-weight: bolder;
+    font-family: "monospace";
 }
 
 
