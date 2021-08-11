@@ -1,7 +1,13 @@
 const gameboard = (() => {
-    let board = [["", "", ""],
+    let board = [];
+
+    const restartBoard = () => {
+        board = [["", "", ""],
                  ["", "", ""],
                  ["", "", ""]];
+    }
+
+    const getBoard = () => board;
     
     const setOwnerId = (posY, posX, owner) => {
         if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
@@ -19,7 +25,7 @@ const gameboard = (() => {
         if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
             return board[posY][posX]
         } else {
-            return "none"
+            return false;
         }
     }
 
@@ -46,7 +52,7 @@ const gameboard = (() => {
         return result = checkFullColumn(lastY, lastX) || checkFullRow(lastY, lastX) || checkFullDiags(lastY, lastX);
     }
 
-    return {setOwnerId, getOwnerId, checkWin}
+    return {setOwnerId, getOwnerId, checkWin, restartBoard, getBoard}
 })()
 
 const Player = (id, name, symbol, color) => {
@@ -72,10 +78,10 @@ const Player = (id, name, symbol, color) => {
 const game = (() => {
     const player1 = Player("p1", "player 1", "X", "#f00");
     const player2 = Player("p2", "player 2", "O", "#0f0");
-
+    
+    let lastWinner = "no one"
+    const getLastWinner = () => lastWinner;
     let turn = 0;
-
-    const getTurn = () => turn;
 
     const checkEndGame = (cellY, cellX) => {
         if (gameboard.checkWin(cellY, cellX)) {
@@ -102,12 +108,13 @@ const game = (() => {
         let winner = checkEndGame(cellY, cellX);
         if (winner) {
             if (winner === "p1") {
-                console.log(player1.getScore());
                 player1.increaseScore();
-                console.log(player1.getScore());
+                lastWinner = player1.getName();
             } else if (winner === "p2") {
                 player2.increaseScore();
-            }
+                lastWinner = player2.getName();
+            } else {lastWinner = "no one, it was a tie!"}
+            console.log(`winner is: ${winner}`);
             endGame();
         }
     }
@@ -118,15 +125,39 @@ const game = (() => {
         })
         document.querySelector(".p1-score p").textContent = player1.getScore();
         document.querySelector(".p2-score p").textContent = player2.getScore();
+        
+        let winnerSign = document.createElement("div");
+        winnerSign.classList.add("winnerSign");
+        winnerSign.textContent = `The winner is: ${getLastWinner()}`;
+        let closeButton = document.createElement("div");
+        closeButton.textContent = "OK"
+        closeButton.classList.add("closeButton");
+        closeButton.addEventListener("click", startGame);
+        winnerSign.appendChild(closeButton);
+        document.querySelector("body").appendChild(winnerSign);
+
     }
 
+    const startGame = () => {
+        let winnerSign = document.querySelector(".winnerSign");
+        console.log(winnerSign);
+        if (winnerSign) {
+            let closeButton = document.querySelector(".closeButton");
+            closeButton.removeEventListener("click", startGame);
+            closeButton.remove();
+            winnerSign.remove();
+        }
+        winner = false;
+        gameboard.restartBoard();
+        cells.forEach((cell) => {
+            cell.textContent = "";
+            addEventListener("click", playRound);
+        })}
+
     const cells = document.querySelectorAll(".cell");
-    cells.forEach((cell) => {
-        addEventListener("click", playRound)
-    })
-    return {getTurn, player1, player2}
+
+
+
+
+    return {startGame, player1, player2}
 })()
-
-
-
-
