@@ -1,26 +1,59 @@
 const gameboard = (() => {
-    let board = Array(3).fill(Array(3).fill(""));
+    const buildBoard = (n) => {
+        let board = [];
+        for (let i = 0; i < n; i++) {
+            let row = [];
+            for (let j=0; j<n; j++) {row.push("")}
+            board.push(row);            
+        } return board;
+    }
+
+    // let board = [["", "", ""],
+    //              ["", "", ""],
+    //              ["", "", ""]];
+
+    let board = buildBoard(3);
     
     const setOwnerId = (posY, posX, owner) => {
-        board[posY][posX] = owner.getId();
-        let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
-        console.log(cell)
-        cell.style.color = owner.getColor();
-        cell.textContent = owner.getSymbol();
+        console.table(board);
+        if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
+            board[posY][posX] = owner.getId();
+            let cell = document.querySelector(`[data-y="${posY}"][data-x="${posX}"]`);
+            console.log(cell)
+            cell.style.color = owner.getColor();
+            cell.textContent = owner.getSymbol();
+        }
     }
 
     const getOwnerId = (posY, posX) => {
-        return board[posY][posX]
+        if ((0 <= posY && posY <= 2) && (0 <= posX && posX <= 2)) {
+            return board[posY][posX]
+        } else {
+            return "none"
+        }
     }
 
-    const checkWin = (lastCell) => {
-        const firstY = lastCell.dataset.y;
-        const firstX = lastCell.dataset.x;
-        const firstNeighbours = findNeighbourgs(firstY, firstX);
-        const SecondNeighbours = []
-        firstNeighbours.forEach( (cellY, cellX) => {
-             secondNeighbours.push(...findNeighbourgs(cellY, cellX))
-            })
+    const checkFullColumn = (y, x) => {
+        const owner = getOwnerId(y, x);
+        return getOwnerId(0, x) === owner && getOwnerId(1, x) === owner && getOwnerId(2, x);
+    }
+
+    const checkFullRow = (y, x) => {
+        const owner = getOwnerId(y, x);
+        return getOwnerId(y, 0) === owner && getOwnerId(y, 1) === owner && getOwnerId(y, 2);
+    }
+
+    const checkFullDiags = (y, x) => {
+        const owner = getOwnerId(y, x);
+        if (getOwnerId(0, 0) === owner) {
+            return getOwnerId(1, 1) === owner && getOwnerId(2, 2) === owner;
+        } else if (getOwnerId(0, 2) === owner) {
+            return getOwnerId(1, 1) === owner && getOwnerId(2, 0) === owner;
+        }
+    }
+
+    const checkWin = (lastY, lastX) => {
+        return checkFullColumn(lastY, lastX) || checkFullRow(lastY, lastX) || checkFullDiags(lastY, lastX);
     }
 
     return {setOwnerId, getOwnerId, checkWin}
@@ -55,7 +88,6 @@ const game = (() => {
 
     const getTurn = () => turn;
     const playRound = (event) => {
-        console.log(event)
         cellY = event.target.dataset.y;
         cellX = event.target.dataset.x;
         if (turn % 2 === 0) {
@@ -64,10 +96,16 @@ const game = (() => {
             gameboard.setOwnerId(cellY, cellX, player2);
         }
         turn += 1;
+        if (gameboard.checkWin(cellY, cellX)) {
+            console.log("We have a winner!!!");
+            gameFinished = true;
+            endGame();}
     }
 
-    const checkEndGame = () => {
-        
+    const endGame = () => {
+        cells.forEach((cell) => {
+            removeEventListener("click", playRound);
+        })
     }
 
     const cells = document.querySelectorAll(".cell");
