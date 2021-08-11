@@ -92,6 +92,7 @@ h1 {
     font-weight: 400;
 }
 
+.save-changes,
 .closeButton {
     width: 40%;
     height: 20%;
@@ -108,6 +109,7 @@ h1 {
     color: black;
 }
 
+.save-changes:active,
 .closeButton:active {
     box-shadow: inset 2px 2px rgb(144, 144, 144), inset -2px -2px rgb(144, 144, 144);
 }
@@ -144,4 +146,41 @@ h1 {
     height: 80vh;
     width: 80vw;
     background-color: rgba(100, 100, 100, 0.9);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+    border: solid 5px rgb(190,190,190);
+    border-radius: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.config-menu h1 {
+    font-size: 3em;
+}
+
+.config-menu div{
+    font-size: 1.5em;
+    min-width: 30%;
+}
+
+.config-menu div h2 {
+    text-align: center;
+    font-weight: 600;
+}
+
+.config-menu form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0;
+
+}
+
+#p1-name, 
+#p2-name {
+    width: 150px;
 }

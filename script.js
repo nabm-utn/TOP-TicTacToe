@@ -160,23 +160,33 @@ const game = (() => {
     return {startGame, player1, player2}
 })();
 
-
 game.startGame();
-const configMenu = document.querySelector(".config-menu");
-configMenu.parentNode.removeChild(configMenu);
-document.querySelector("body").appendChild(configMenu);
 
 
-// const ShowConfigMenu = () => {
-//     let menu = document.createElement("div");
-//     menu.classList.add("config-menu");
-//     document.querySelector("body").appendChild(menu);
-// }
+
+// document.querySelector("body").appendChild(configMenu);
+
+
+
 
 // Game Config Interface...
+const configMenu = document.querySelector(".config-menu");
 const configButton = document.querySelector(".config-button");
+const saveButton = configMenu.querySelector(".save-changes");
+configMenu.parentNode.removeChild(configMenu);
+
+const showConfigMenu = (event) => {
+    event.target.removeEventListener("click", showConfigMenu);
+    document.querySelector("body").appendChild(configMenu)};
+configButton.addEventListener("click", showConfigMenu);
+
+const saveChanges = (event) => {
+    // dostuffhere
+    configMenu.parentNode.removeChild(configMenu);
+}
+saveButton.addEventListener("click", saveChanges);
+
 const p1Name = document.querySelector(".p1-name");
 const p2Name = document.querySelector(".p2-name");
 p1Name.textContent = game.player1.getName()+":";
 p2Name.textContent = game.player2.getName()+":";
-configButton.addEventListener("click", ShowConfigMenu());
