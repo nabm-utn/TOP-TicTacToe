@@ -5,14 +5,15 @@
         <title>NABM's Tic Tac Toe</title>
         <link rel="stylesheet" href="reset.css">
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script src="script.js" defer></script>
     </head>
 
     <body>
         <h1>Tic Tac Toe</h1>
         <div class="scoreboard">
-            <div class="p1-score">Player 1: <p>0</p></div>
-            <div class="p2-score">Player 2: <p>0</p></div>
+            <div class="scoreboard-p1"><p class="p1-name"><p class="p1-score">0</p></div>
+            <div class="scoreboard-p2"><p class="p2-name"><p class="p2-score">0</p></div>
         </div>
         <div class="container">
             <div class="cell" data-y="0" data-x="0"></div>
@@ -24,6 +25,62 @@
             <div class="cell" data-y="2" data-x="0"></div>
             <div class="cell" data-y="2" data-x="1"></div>
             <div class="cell" data-y="2" data-x="2"></div>
+        </div>
+        
+        <button class="config-button"><span class="material-icons">settings</span></button>
+        <div class="config-menu">
+            <div class="p1-config">
+                <form>
+                    <label for="p1-name">Player 1 Name: </label>
+                    <input id="p1-name" placeholder="Player 1">
+                </form>
+                <form>
+                    <label for="p1-color">Player 1 color: </label>
+                    <input id="p1-color" type="color" value="#ff0000">
+                </form>
+                <form>
+                    <label>Player 1 symbol:</label>
+                    <input type="radio" id="p1-X" name="p1-symbol" value="X" checked>
+                    <label for="p1-X">X</label>
+    
+                    <input type="radio" id="p1-O" name="p1-symbol" value="O">
+                    <label for="p1-O">O</label>
+    
+                    <input type="radio" id="p1-$" name="p1-symbol" value="$">
+                    <label for="p1-$">$</label>
+    
+                    <input type="radio" id="p1-@" name="p1-symbol" value="@">
+                    <label for="p1-@">@</label>
+                </form>
+            </div>
+
+            <div class="p2-config">
+                <form>
+                    <label for="p2-name">Player 2 Name: </label>
+                    <input id="p2-name" placeholder="Player 2">
+                </form>
+                <form>
+                    <label for="p2-color">Player 2 color: </label>
+                    <input id="p2-color" type="color" value="#00ff00">
+                </form>
+                <form>
+                    <label>Player 2 symbol:</label>
+                    <input type="radio" id="p2-X" name="p2-symbol" value="X">
+                    <label for="p2-X">X</label>
+    
+                    <input type="radio" id="p2-O" name="p2-symbol" value="O" checked>
+                    <label for="p2-O">O</label>
+    
+                    <input type="radio" id="p2-$" name="p2-symbol" value="$">
+                    <label for="p2-$">$</label>
+    
+                    <input type="radio" id="p2-@" name="p2-symbol" value="@">
+                    <label for="p2-@">@</label>
+                </form>
+            </div>
+
+            
+
         </div>
     </body>
 </html>

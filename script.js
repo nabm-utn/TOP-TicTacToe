@@ -121,8 +121,8 @@ const game = (() => {
         cells.forEach((cell) => {
             removeEventListener("click", playRound);
         })
-        document.querySelector(".p1-score p").textContent = player1.getScore();
-        document.querySelector(".p2-score p").textContent = player2.getScore();
+        document.querySelector(".p1-score").textContent = player1.getScore();
+        document.querySelector(".p2-score").textContent = player2.getScore();
         
         let winnerSign = document.createElement("div");
         winnerSign.classList.add("winnerSign");
@@ -158,4 +158,25 @@ const game = (() => {
 
 
     return {startGame, player1, player2}
-})().startGame()
+})();
+
+
+game.startGame();
+const configMenu = document.querySelector(".config-menu");
+configMenu.parentNode.removeChild(configMenu);
+document.querySelector("body").appendChild(configMenu);
+
+
+// const ShowConfigMenu = () => {
+//     let menu = document.createElement("div");
+//     menu.classList.add("config-menu");
+//     document.querySelector("body").appendChild(menu);
+// }
+
+// Game Config Interface...
+const configButton = document.querySelector(".config-button");
+const p1Name = document.querySelector(".p1-name");
+const p2Name = document.querySelector(".p2-name");
+p1Name.textContent = game.player1.getName()+":";
+p2Name.textContent = game.player2.getName()+":";
+configButton.addEventListener("click", ShowConfigMenu());
