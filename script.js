@@ -58,6 +58,7 @@ const Player = (id, name, symbol, color) => {
     const getName = () => name;
     const setName = (newName) => {name = newName};
     const getSymbol = () => symbol;
+    const setSymbol = (newSymbol) => {symbol = newSymbol};
     const getColor = () => color;
     const setColor = (newColor) => {color = newColor};
 
@@ -67,7 +68,7 @@ const Player = (id, name, symbol, color) => {
     
     return {getId, 
             getName, setName, 
-            getSymbol, 
+            getSymbol, setSymbol,
             getColor, setColor,
             getScore, increaseScore}
     }
@@ -181,12 +182,30 @@ const showConfigMenu = (event) => {
 configButton.addEventListener("click", showConfigMenu);
 
 const saveChanges = (event) => {
-    // dostuffhere
+    // update p1 config
+    const inputP1Name = document.querySelector("#p1-name");
+    const inputP1Color = document.querySelector("#p1-color");
+    const inputP1Symbol = document.querySelector('input[name="p1-symbol"]:checked');
+    game.player1.setName(inputP1Name.value);
+    game.player1.setColor(inputP1Color.value);
+    game.player1.setSymbol(inputP1Symbol.value);
+
+    // update p2 config
+    const inputP2Name = document.querySelector("#p2-name");
+    const inputP2Color = document.querySelector("#p2-color");
+    const inputP2Symbol = document.querySelector('input[name="p2-symbol"]:checked');
+    game.player2.setName(inputP2Name.value);
+    game.player2.setColor(inputP2Color.value);
+    game.player2.setSymbol(inputP2Symbol.value);
+
+    // update scorboard names
+    const p1Name = document.querySelector(".p1-name");
+    const p2Name = document.querySelector(".p2-name");
+    p1Name.textContent = game.player1.getName()+":";
+    p2Name.textContent = game.player2.getName()+":";
+    
+    // close config menu
     configMenu.parentNode.removeChild(configMenu);
 }
-saveButton.addEventListener("click", saveChanges);
 
-const p1Name = document.querySelector(".p1-name");
-const p2Name = document.querySelector(".p2-name");
-p1Name.textContent = game.player1.getName()+":";
-p2Name.textContent = game.player2.getName()+":";
+saveButton.addEventListener("click", saveChanges);
